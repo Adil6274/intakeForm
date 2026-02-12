@@ -1,0 +1,457 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="app-shell">
+    <aside class="sidebar">
+        <div class="brand">
+            <span class="brand-logo">PB</span>
+            <span class="brand-name">Portfolio Builder</span>
+        </div>
+        <nav class="steps-nav">
+            <div class="step-indicator" data-step="1">1. Profile</div>
+            <div class="step-indicator" data-step="2">2. Brand &amp; Goals</div>
+            <div class="step-indicator" data-step="3">3. Experience</div>
+            <div class="step-indicator" data-step="4">4. Projects</div>
+            <div class="step-indicator" data-step="5">5. Website Setup</div>
+            <div class="step-indicator" data-step="6">6. Review &amp; Submit</div>
+        </nav>
+    </aside>
+
+    <main class="main-content">
+        <header class="main-header">
+            <h1>{{ header or "Client Intake Form" }}</h1>
+            <p class="subtitle">
+                {{ subtitle or "Tell us everything we need to build your dream portfolio website." }}
+            </p>
+            <div class="progress-bar">
+                <div class="progress-bar-fill" id="progressFill"></div>
+            </div>
+        </header>
+
+        <section class="content">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    <div class="flash-container">
+                        {% for category, msg in messages %}
+                            <div class="flash flash-{{ category }}">{{ msg }}</div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            {% endwith %}
+
+            <form id="intakeForm" action="{{ url_for('submit') }}" method="POST" enctype="multipart/form-data">
+
+                <!-- STEP 1: Profile -->
+                <div class="form-step active" data-step="1">
+                    <h2>Profile & Contact</h2>
+                    <div class="grid-2">
+                        <div class="form-group">
+                            <label>Full Name *</label>
+                            <input type="text" name="fullName" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Preferred Name (for display)</label>
+                            <input type="text" name="preferredName">
+                        </div>
+                    </div>
+                    <div class="grid-2">
+                        <div class="form-group">
+                            <label>Profession / Title *</label>
+                            <input type="text" name="profession" required placeholder="e.g. Data Analyst, Web Developer, Designer">
+                        </div>
+                        <div class="form-group">
+                            <label>One-line Tagline</label>
+                            <input type="text" name="tagline" placeholder="e.g. Turning data into decisions">
+                        </div>
+                    </div>
+
+                    <div class="grid-2">
+                        <div class="form-group">
+                            <label>Email *</label>
+                            <input type="email" name="email" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Phone</label>
+                            <input type="tel" name="phone">
+                        </div>
+                    </div>
+                    <div class="grid-2">
+                        <div class="form-group">
+                            <label>WhatsApp (if different)</label>
+                            <input type="tel" name="whatsapp">
+                        </div>
+                        <div class="form-group">
+                            <label>Location (City, Country)</label>
+                            <input type="text" name="location">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Time Zone</label>
+                        <input type="text" name="timeZone" placeholder="e.g. IST, GMT+5:30">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Short Bio (2–3 sentences for hero section)</label>
+                        <textarea name="bioShort" placeholder="Brief overview to appear at top of your site."></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Detailed Bio / About You *</label>
+                        <textarea name="bioLong" required placeholder="Your story, background, what you do, why you do it, etc."></textarea>
+                    </div>
+
+                    <div class="form-nav">
+                        <button type="button" class="btn-next">Next</button>
+                    </div>
+                </div>
+
+                <!-- STEP 2: Brand & Goals -->
+                <div class="form-step" data-step="2">
+                    <h2>Brand, Goals & Style</h2>
+                    <div class="grid-2">
+                        <div class="form-group">
+                            <label>Company / Brand Name</label>
+                            <input type="text" name="company">
+                        </div>
+                        <div class="form-group">
+                            <label>Industry / Field *</label>
+                            <input type="text" name="industry" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Primary Purpose of the Website *</label>
+                        <select name="websitePurpose" required>
+                            <option value="">Select one</option>
+                            <option value="portfolio">Showcase portfolio</option>
+                            <option value="leads">Generate client leads</option>
+                            <option value="job">Get hired / job search</option>
+                            <option value="personal-brand">Build personal brand</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Target Audience *</label>
+                        <textarea name="targetAudience" required placeholder="Who should your site speak to? Recruiters, clients, agencies, etc."></textarea>
+                    </div>
+
+                    <div class="grid-2">
+                        <div class="form-group">
+                            <label>Tone & Visual Style *</label>
+                            <select name="toneStyle" required>
+                                <option value="">Select one</option>
+                                <option value="clean-minimal">Clean & minimal</option>
+                                <option value="creative-bold">Creative & bold</option>
+                                <option value="corporate">Corporate / professional</option>
+                                <option value="playful">Playful / friendly</option>
+                                <option value="dark-tech">Dark / tech / futuristic</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>3–5 Keywords to Describe Your Brand</label>
+                            <input type="text" name="brandKeywords" placeholder="e.g. analytical, reliable, modern, fast-learning">
+                        </div>
+                    </div>
+
+                    <div class="grid-2">
+                        <div class="form-group">
+                            <label>Preferred Colors</label>
+                            <input type="text" name="colorPrefs" placeholder="e.g. #0a192f, navy + teal, light theme only">
+                        </div>
+                        <div class="form-group">
+                            <label>Colors to Avoid</label>
+                            <input type="text" name="dontUseColors" placeholder="e.g. bright yellow, dark red">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Inspiration Websites (URLs)</label>
+                        <textarea name="inspiration" placeholder="Links to websites/portfolios you like and why."></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Existing Website (if any)</label>
+                        <input type="url" name="existingWebsite" placeholder="https://">
+                    </div>
+
+                    <div class="grid-2">
+                        <div class="form-group">
+                            <label>What do you like about your current/other sites?</label>
+                            <textarea name="likesExisting"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>What do you dislike / want to fix?</label>
+                            <textarea name="dislikesExisting"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Upload Logo / Brand Assets</label>
+                        <input type="file" name="brandAssets" multiple>
+                    </div>
+
+                    <div class="form-nav">
+                        <button type="button" class="btn-prev">Back</button>
+                        <button type="button" class="btn-next">Next</button>
+                    </div>
+                </div>
+
+                <!-- STEP 3: Experience & Skills -->
+                <div class="form-step" data-step="3">
+                    <h2>Experience, Skills & Services</h2>
+
+                    <div class="form-group">
+                        <label>Work Experience (roles, companies, dates, key achievements) *</label>
+                        <textarea name="experience" required></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Education & Certifications</label>
+                        <textarea name="education"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Key Skills (comma separated) *</label>
+                        <input type="text" name="skills" required placeholder="Python, SQL, React, Data Visualization, ...">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Services You Offer (for services section)</label>
+                        <textarea name="servicesOffered" placeholder="e.g. Data analysis consulting, dashboard development, training, etc."></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Notable Achievements / Awards / Publications</label>
+                        <textarea name="achievements"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Upload CV / Resume (PDF)</label>
+                        <input type="file" name="resume">
+                    </div>
+
+                    <div class="form-nav">
+                        <button type="button" class="btn-prev">Back</button>
+                        <button type="button" class="btn-next">Next</button>
+                    </div>
+                </div>
+
+                <!-- STEP 4: Projects -->
+                <div class="form-step" data-step="4">
+                    <h2>Projects & Case Studies</h2>
+                    <p class="hint">Add your best 3–8 projects. We will highlight these on the portfolio.</p>
+
+                    <div id="projectsContainer">
+                        <div class="project-card">
+                            <div class="grid-2">
+                                <div class="form-group">
+                                    <label>Project Title *</label>
+                                    <input type="text" name="projectTitle[]" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>Your Role</label>
+                                    <input type="text" name="projectRole[]" placeholder="e.g. Lead Developer, Data Analyst">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>Project Description *</label>
+                                <textarea name="projectDesc[]" required placeholder="What problem did it solve? What did you do?"></textarea>
+                            </div>
+                            <div class="grid-2">
+                                <div class="form-group">
+                                    <label>Tech Stack</label>
+                                    <input type="text" name="projectTech[]" placeholder="React, Flask, PostgreSQL, Power BI">
+                                </div>
+                                <div class="form-group">
+                                    <label>Results / Impact</label>
+                                    <textarea name="projectResults[]" placeholder="e.g. Increased revenue by 15%, reduced processing time by 40%"></textarea>
+                                </div>
+                            </div>
+                            <div class="grid-2">
+                                <div class="form-group">
+                                    <label>Live URL / Demo</label>
+                                    <input type="url" name="projectUrl[]" placeholder="https://">
+                                </div>
+                                <div class="form-group">
+                                    <label>Upload Screenshots</label>
+                                    <input type="file" name="projectFiles_0" multiple>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button type="button" class="btn-secondary" id="addProjectBtn">+ Add Another Project</button>
+
+                    <div class="form-nav">
+                        <button type="button" class="btn-prev">Back</button>
+                        <button type="button" class="btn-next">Next</button>
+                    </div>
+                </div>
+
+                <!-- STEP 5: Website Structure & Tech -->
+                <div class="form-step" data-step="5">
+                    <h2>Website Structure & Technical Preferences</h2>
+
+                    <div class="form-group">
+                        <label>Pages / Sections Needed *</label>
+                        <div class="pill-checkboxes">
+                            <label><input type="checkbox" name="pages[]" value="home"> Home / Hero</label>
+                            <label><input type="checkbox" name="pages[]" value="about"> About</label>
+                            <label><input type="checkbox" name="pages[]" value="projects"> Projects / Case Studies</label>
+                            <label><input type="checkbox" name="pages[]" value="skills"> Skills</label>
+                            <label><input type="checkbox" name="pages[]" value="experience"> Experience</label>
+                            <label><input type="checkbox" name="pages[]" value="services"> Services</label>
+                            <label><input type="checkbox" name="pages[]" value="testimonials"> Testimonials</label>
+                            <label><input type="checkbox" name="pages[]" value="blog"> Blog</label>
+                            <label><input type="checkbox" name="pages[]" value="contact"> Contact</label>
+                            <label><input type="checkbox" name="pages[]" value="faq"> FAQ</label>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Features Needed</label>
+                        <div class="pill-checkboxes">
+                            <label><input type="checkbox" name="features[]" value="contact-form"> Contact form</label>
+                            <label><input type="checkbox" name="features[]" value="newsletter"> Newsletter signup</label>
+                            <label><input type="checkbox" name="features[]" value="blog"> Blog system</label>
+                            <label><input type="checkbox" name="features[]" value="gallery"> Image gallery / slider</label>
+                            <label><input type="checkbox" name="features[]" value="download-cv"> Downloadable CV</label>
+                            <label><input type="checkbox" name="features[]" value="multi-language"> Multi-language</label>
+                            <label><input type="checkbox" name="features[]" value="animations"> Animations / micro-interactions</label>
+                            <label><input type="checkbox" name="features[]" value="seo"> SEO optimization</label>
+                            <label><input type="checkbox" name="features[]" value="analytics"> Analytics (traffic tracking)</label>
+                        </div>
+                    </div>
+
+                    <div class="grid-2">
+                        <div class="form-group">
+                            <label>Primary Call-to-Action (CTA) *</label>
+                            <input type="text" name="primaryCta" required placeholder="e.g. Hire Me, Book a Call, Download CV">
+                        </div>
+                        <div class="form-group">
+                            <label>Secondary CTA</label>
+                            <input type="text" name="secondaryCta" placeholder="e.g. View Projects, Learn More">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Preferred Contact Method *</label>
+                        <select name="preferredContact" required>
+                            <option value="">Select one</option>
+                            <option value="email">Email</option>
+                            <option value="phone">Phone</option>
+                            <option value="whatsapp">WhatsApp</option>
+                            <option value="contact-form">Website contact form</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Social Profiles</label>
+                        <div class="grid-2">
+                            <input type="url" name="linkedin" placeholder="LinkedIn URL">
+                            <input type="url" name="github" placeholder="GitHub URL">
+                            <input type="url" name="behance" placeholder="Behance URL">
+                            <input type="url" name="dribbble" placeholder="Dribbble URL">
+                            <input type="url" name="instagram" placeholder="Instagram URL">
+                            <input type="url" name="twitter" placeholder="Twitter/X URL">
+                        </div>
+                        <input type="url" name="otherSocial" placeholder="Any other important link (portfolio, Medium, etc.)">
+                    </div>
+
+                    <div class="grid-2">
+                        <div class="form-group">
+                            <label>Content Management Preference</label>
+                            <select name="cmsPreference">
+                                <option value="">No preference / discuss</option>
+                                <option value="static">Static site (developer updates)</option>
+                                <option value="simple-cms">Simple CMS</option>
+                                <option value="wordpress">WordPress</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Blog / Articles</label>
+                            <select name="blogPreference">
+                                <option value="no-blog">No blog</option>
+                                <option value="simple-blog">Simple blog</option>
+                                <option value="full-blog">Full blog with categories/tags</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="grid-2">
+                        <div class="form-group">
+                            <label>Ongoing Support & Maintenance</label>
+                            <select name="ongoingSupport">
+                                <option value="none">No ongoing support needed</option>
+                                <option value="monthly">Monthly updates</option>
+                                <option value="per-request">Only when needed</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>SEO Level</label>
+                            <select name="seoLevel">
+                                <option value="basic">Basic</option>
+                                <option value="intermediate">Intermediate (keywords, metadata, speed)</option>
+                                <option value="advanced">Advanced (content planning, backlinks etc.)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Analytics</label>
+                        <select name="analytics">
+                            <option value="none">No analytics</option>
+                            <option value="google-analytics">Google Analytics</option>
+                            <option value="simple-dashboard">Simple dashboard only</option>
+                        </select>
+                    </div>
+
+                    <div class="grid-2">
+                        <div class="form-group">
+                            <label>Ideal Launch Deadline *</label>
+                            <input type="date" name="deadline" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Budget Range (optional)</label>
+                            <input type="text" name="budgetRange" placeholder="$500–$1500, etc.">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Content Status</label>
+                        <textarea name="contentReady" placeholder="Which content is ready (text, images, case studies), and what still needs to be created?"></textarea>
+                    </div>
+
+                    <div class="form-nav">
+                        <button type="button" class="btn-prev">Back</button>
+                        <button type="button" class="btn-next">Next</button>
+                    </div>
+                </div>
+
+                <!-- STEP 6: Review & Submit -->
+                <div class="form-step" data-step="6">
+                    <h2>Other Notes & Final Uploads</h2>
+
+                    <div class="form-group">
+                        <label>Any Other Notes, Requirements, or Ideas?</label>
+                        <textarea name="otherNotes" placeholder="Anything else we should know (animations, copywriting help, integrations, etc.)"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Upload Any Extra Files (images, docs, brand guide, etc.)</label>
+                        <input type="file" name="extraFiles" multiple>
+                    </div>
+
+                    <p class="hint">After you submit, we will review your answers and get back to you with structure & design ideas.</p>
+
+                    <div class="form-nav">
+                        <button type="button" class="btn-prev">Back</button>
+                        <button type="submit" class="btn-primary">Submit Form</button>
+                    </div>
+                </div>
+            </form>
+
+        </section>
+    </main>
+</div>
+{% endblock %}

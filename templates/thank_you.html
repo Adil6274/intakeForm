@@ -1,0 +1,100 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="thankyou-page">
+  <div class="thankyou-card">
+
+    <div class="thankyou-icon">✓</div>
+
+    <!-- 1) Hero line with big ID -->
+    <p class="thankyou-ref-hero">
+      Your <strong>Reference ID</strong>:
+      <span class="reference-id">{{ public_id }}</span>
+    </p>
+
+    <h1 class="thankyou-title">Thank you for your submission!</h1>
+
+    <p class="thankyou-subtitle">
+      Your responses have been received and your project brief is now in the review pipeline.
+    </p>
+
+    <!-- 2) Details block with ID again -->
+    <div class="thankyou-details">
+      <p>
+        <strong>Your reference ID:</strong>
+        <span class="reference-id">{{ public_id }}</span>
+      </p>
+      <p>
+        Please <strong>save or screenshot</strong> this ID. Whenever you contact me about this portfolio project,
+        just mention <strong>reference ID {{ public_id }}</strong> so I can quickly pull up your details.
+      </p>
+    </div>
+
+    <p>
+      <strong>What happens next:</strong><br>
+      1) I will review your goals, target audience, and content inputs from this form.<br>
+      2) I will outline a clear structure for your portfolio website (pages, sections, CTAs, visuals).<br>
+      3) I will contact you using your preferred method to discuss timeline, budget clarity, and next steps.
+    </p>
+
+    <p style="margin-top: 10px;">
+      in the meantime, feel free to connect with me on social media or check out my past work to get a sense of my style and approach.
+    </p>
+    <ul class="social-links">
+      <li>
+        <a href="https://www.linkedin.com/in/YOUR_REAL_LINKEDIN" target="_blank" aria-label="LinkedIn">
+          <span class="social-icon linkedin">
+            <i class="fab fa-linkedin-in"></i>
+          </span>
+        </a>
+      </li>
+      <li>
+        <a href="https://github.com/YOUR_REAL_GITHUB" target="_blank" aria-label="GitHub">
+          <span class="social-icon github">
+            <i class="fab fa-github"></i>
+          </span>
+        </a>
+      </li>
+      <li>
+        <a href="https://www.instagram.com/YOUR_REAL_INSTAGRAM" target="_blank" aria-label="Instagram">
+          <span class="social-icon instagram">
+            <i class="fab fa-instagram"></i>
+          </span>
+        </a>
+      </li>
+      <li>
+        <a href="https://twitter.com/YOUR_REAL_TWITTER" target="_blank" aria-label="Twitter/X">
+          <span class="social-icon twitter">
+            <i class="fab fa-x-twitter"></i>
+          </span>
+        </a>
+      </li>
+    </ul>
+
+    <p style="margin-top: 6px;">
+      Thank you again for trusting me with your portfolio. I’m excited to help you
+      present your work in a clear, professional, and impactful way.
+    </p>
+
+    <!-- ADDED: actions including PDF download -->
+    <div class="thankyou-actions">
+      <a href="{{ url_for('intake_pdf', public_id=public_id) }}" class="btn-secondary">
+        Download PDF summary & receipt
+      </a>
+      <a href="{{ url_for('intake_form') }}" class="btn-primary">
+        Back to intake form
+      </a>
+    </div>
+
+    <!-- ADDED: small note about what’s in the PDF -->
+    <p class="thankyou-footer-link">
+      Your PDF will include your full intake answers, our company details, a QR code, and a payment/receipt section.
+    </p>
+
+    <p class="thankyou-footer-link">
+      Keep this <strong>Reference ID: {{ public_id }}</strong> handy for any future updates.
+    </p>
+
+  </div>
+</div>
+{% endblock %}

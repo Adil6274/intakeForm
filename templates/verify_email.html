@@ -1,0 +1,259 @@
+{% extends "base.html" %}
+
+{% block content %}
+<style>
+  .verify-card {
+    max-width: 420px;
+    margin: 2rem auto;
+    padding: 2rem 2.4rem;
+    background: #0b1120;
+    border-radius: 16px;
+    box-shadow: 0 18px 45px rgba(15, 23, 42, 0.55);
+    border: 1px solid rgba(148, 163, 184, 0.12);
+  }
+
+  .verify-header {
+    text-align: center;
+    margin-bottom: 1.75rem;
+  }
+
+  .verify-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 999px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 0.75rem;
+    background: radial-gradient(circle at 30% 0%, #38bdf8, #0ea5e9 40%, #1e293b);
+    box-shadow: 0 10px 25px rgba(56, 189, 248, 0.45);
+  }
+
+  .verify-icon span {
+    font-size: 1.35rem;
+  }
+
+  .verify-header h2 {
+    font-size: 1.4rem;
+    font-weight: 600;
+    color: #e5e7eb;
+    margin: 0 0 0.4rem;
+  }
+
+  .verify-subtitle {
+    font-size: 0.9rem;
+    color: #9ca3af;
+    line-height: 1.4;
+  }
+
+  .verify-email {
+    color: #e5e7eb;
+    font-weight: 500;
+  }
+
+  .verify-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+
+  .otp-input-group label {
+    display: block;
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: #d1d5db;
+    margin-bottom: 0.5rem;
+  }
+
+  .otp-input-wrapper {
+    position: relative;
+  }
+
+  .otp-input-wrapper input {
+    width: 100%;
+    padding: 0.75rem 0.9rem;
+    font-size: 1.25rem;
+    letter-spacing: 0.4em;
+    text-align: center;
+    border-radius: 10px;
+    border: 1px solid rgba(148, 163, 184, 0.4);
+    background: rgba(15, 23, 42, 0.85);
+    color: #f9fafb;
+    outline: none;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+  }
+
+  .otp-input-wrapper input::placeholder {
+    color: rgba(148, 163, 184, 0.6);
+  }
+
+  .otp-input-wrapper input:focus {
+    border-color: #38bdf8;
+    box-shadow: 0 0 0 1px rgba(56, 189, 248, 0.6);
+    background: rgba(15, 23, 42, 1);
+  }
+
+  .otp-hint {
+    margin-top: 0.45rem;
+    font-size: 0.78rem;
+    color: #6b7280;
+  }
+
+  .verify-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    margin-top: 0.25rem;
+  }
+
+  .btn-primary.btn-full-width {
+    width: 100%;
+    justify-content: center;
+    padding: 0.7rem 1rem;
+    border-radius: 999px;
+    background: linear-gradient(135deg, #38bdf8, #6366f1);
+    border: none;
+    color: #0b1120;
+    font-weight: 600;
+    font-size: 0.95rem;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    box-shadow: 0 14px 30px rgba(56, 189, 248, 0.35);
+    transition: transform 0.08s ease, box-shadow 0.08s ease, filter 0.08s ease;
+  }
+
+  .btn-primary.btn-full-width:hover {
+    transform: translateY(-1px);
+    filter: brightness(1.05);
+    box-shadow: 0 18px 40px rgba(37, 99, 235, 0.55);
+  }
+
+  .btn-primary.btn-full-width:active {
+    transform: translateY(0);
+    box-shadow: 0 10px 20px rgba(15, 23, 42, 0.9);
+  }
+
+  .btn-link {
+    background: none;
+    border: none;
+    padding: 0;
+    font-size: 0.8rem;
+    color: #9ca3af;
+    cursor: pointer;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    align-self: center;
+  }
+
+  .btn-link:hover {
+    color: #e5e7eb;
+  }
+
+  .resend-hint {
+    margin-top: 0.25rem;
+    font-size: 0.78rem;
+    color: #6b7280;
+    text-align: center;
+  }
+
+  .resend-disabled {
+    color: #9ca3af;
+  }
+
+  .flash-container {
+    max-width: 420px;
+    margin: 1rem auto 0.5rem;
+  }
+
+  .flash {
+    padding: 0.65rem 0.9rem;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    margin-bottom: 0.4rem;
+  }
+
+  .flash-danger {
+    background: rgba(248, 113, 113, 0.12);
+    border: 1px solid rgba(248, 113, 113, 0.4);
+    color: #fecaca;
+  }
+
+  .flash-warning {
+    background: rgba(251, 191, 36, 0.12);
+    border: 1px solid rgba(251, 191, 36, 0.5);
+    color: #fef3c7;
+  }
+
+  .flash-success {
+    background: rgba(34, 197, 94, 0.12);
+    border: 1px solid rgba(34, 197, 94, 0.5);
+    color: #bbf7d0;
+  }
+</style>
+
+<div class="app-shell">
+  <main class="main-content">
+
+    {# Flash messages (e.g. invalid OTP) #}
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <div class="flash-container">
+          {% for category, msg in messages %}
+            <div class="flash flash-{{ category }}">{{ msg }}</div>
+          {% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
+
+    <section class="verify-card">
+      <header class="verify-header">
+        <div class="verify-icon">
+          <span>🔐</span>
+        </div>
+        <h2>Verify your email</h2>
+        <p class="verify-subtitle">
+          We’ve sent a 6-digit verification code to
+          <span class="verify-email">{{ email }}</span>.
+          Enter it below to confirm your email and submit your intake.
+        </p>
+      </header>
+
+      <form method="POST" action="{{ url_for('verify_email') }}" class="verify-form">
+        <div class="otp-input-group">
+          <label for="otp">Verification code</label>
+          <div class="otp-input-wrapper">
+            <input
+              id="otp"
+              type="text"
+              name="otp"
+              inputmode="numeric"
+              maxlength="6"
+              pattern="\d{6}"
+              autocomplete="one-time-code"
+              required
+              placeholder="••••••"
+            >
+          </div>
+          <p class="otp-hint">Enter the 6-digit code from your email inbox.</p>
+        </div>
+
+        <div class="verify-actions">
+          <button type="submit" class="btn-primary btn-full-width">
+            Verify &amp; Submit
+          </button>
+          <button type="button" class="btn-link" onclick="window.location.href='{{ url_for('intake_form') }}'">
+            Use a different email
+          </button>
+        </div>
+
+        <p class="resend-hint">
+          Didn’t receive the code?
+          <span class="resend-disabled">Resend available in 60s</span>
+        </p>
+      </form>
+    </section>
+  </main>
+</div>
+{% endblock %}

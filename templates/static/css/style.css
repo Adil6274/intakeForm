@@ -1,0 +1,723 @@
+/* =========================
+   Global Reset & Base
+   ========================= */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html,
+body {
+    height: 100%;
+}
+
+body {
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    background: radial-gradient(circle at top, #fdfcfb 0, #f5f7ff 40%, #e7f4ff 100%);
+    color: #111827;
+    min-height: 100vh;
+    display: flex;
+}
+
+/* Palette (light, readable)
+   Aquamarine  #ADEAE2
+   Soft blue   #ABB2F4
+   Blush pink  #F4BDE3
+   Warm neutral #F1E3E1
+   Text dark   #111827
+*/
+:root {
+    --bg-root: #f5f7fb;
+    --bg-shell: #edf4ff;
+    --bg-card: #ffffff;
+    --bg-soft: #f9fbff;
+    --primary: #4f46e5;
+    --primary-soft: #6366f1;
+    --accent-aqua: #adeae2;
+    --accent-blue: #abb2f4;
+    --accent-pink: #f4bde3;
+    --accent-warm: #f1e3e1;
+    --border-soft: #e5e7eb;
+    --text-main: #111827;
+    --text-muted: #6b7280;
+    --text-soft: #9ca3af;
+}
+
+/* =========================
+   App Shell
+   ========================= */
+.app-shell {
+    display: flex;
+    min-height: 100vh;
+    width: 100%;
+    max-width: 1200px;
+    margin: auto;
+    padding: 24px;
+    gap: 20px;
+    color: var(--text-main);
+}
+
+/* =========================
+   Sidebar (clean card)
+   ========================= */
+.sidebar {
+    width: 250px;
+    border-radius: 20px;
+    padding: 20px 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+
+    background: linear-gradient(145deg, #ffffff, #edf4ff);
+    border: 1px solid rgba(226, 232, 240, 0.9);
+    box-shadow:
+        0 14px 30px rgba(148, 163, 184, 0.35);
+}
+
+/* Brand */
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.brand-logo {
+    width: 40px;
+    height: 40px;
+    border-radius: 14px;
+    background: conic-gradient(from 180deg, #abb2f4, #adeae2, #f4bde3, #f1e3e1, #abb2f4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    color: #111827;
+    font-size: 1rem;
+    box-shadow:
+        0 8px 18px rgba(148, 163, 184, 0.55);
+}
+
+.brand-name {
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    font-size: 0.88rem;
+    text-transform: uppercase;
+    color: #111827;
+}
+
+/* Steps nav */
+.steps-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.step-indicator {
+    font-size: 0.86rem;
+    padding: 8px 10px;
+    border-radius: 999px;
+    color: var(--text-muted);
+    border: 1px solid transparent;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: transparent;
+    transition:
+        background 0.18s ease,
+        border-color 0.18s ease,
+        color 0.18s ease,
+        transform 0.08s ease;
+}
+
+.step-indicator::before {
+    content: "";
+    width: 9px;
+    height: 9px;
+    border-radius: 999px;
+    background: #e5e7eb;
+}
+
+.step-indicator:hover {
+    background: rgba(171, 178, 244, 0.12);
+    transform: translateY(-1px);
+}
+
+.step-indicator.active {
+    background: linear-gradient(90deg, #abb2f4, #adeae2);
+    border-color: rgba(99, 102, 241, 0.4);
+    color: #111827;
+    font-weight: 600;
+}
+
+.step-indicator.active::before {
+    background: #4f46e5;
+}
+
+/* Sidebar footer */
+.sidebar-footer {
+    margin-top: auto;
+    font-size: 0.8rem;
+    color: var(--text-soft);
+}
+
+.admin-link {
+    color: var(--primary);
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.admin-link:hover {
+    text-decoration: underline;
+}
+
+/* =========================
+   Main Content
+   ========================= */
+.main-content {
+    flex: 1;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+/* Header */
+.main-header {
+    background: linear-gradient(135deg, #ffffff, #f1e3e1);
+    border-radius: 18px;
+    padding: 16px 18px 14px;
+    border: 1px solid rgba(229, 231, 235, 0.9);
+    box-shadow:
+        0 10px 24px rgba(156, 163, 175, 0.4);
+}
+
+.main-header h1 {
+    font-size: 1.6rem;
+    margin-bottom: 4px;
+    color: var(--text-main);
+}
+
+.subtitle {
+    font-size: 0.92rem;
+    color: var(--text-muted);
+    margin-bottom: 10px;
+}
+
+/* Progress bar */
+.progress-bar {
+    width: 100%;
+    height: 7px;
+    border-radius: 999px;
+    background: #e5e7eb;
+    overflow: hidden;
+}
+
+.progress-bar-fill {
+    height: 100%;
+    width: 0;
+    border-radius: inherit;
+    background: linear-gradient(90deg, #4f46e5, #6366f1, #adeae2);
+    transition: width 0.3s ease;
+}
+
+/* =========================
+   Content Card
+   ========================= */
+.content {
+    margin-top: 2px;
+    background: var(--bg-card);
+    border-radius: 20px;
+    padding: 20px 22px 24px;
+    border: 1px solid var(--border-soft);
+    box-shadow:
+        0 14px 30px rgba(148, 163, 184, 0.28);
+}
+
+/* =========================
+   Flash Messages
+   ========================= */
+.flash-container {
+    margin-bottom: 12px;
+}
+
+.flash {
+    padding: 10px 12px;
+    border-radius: 10px;
+    font-size: 0.9rem;
+    margin-bottom: 6px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.flash-success {
+    background: rgba(34, 197, 94, 0.08);
+    color: #166534;
+    border: 1px solid rgba(34, 197, 94, 0.35);
+}
+
+.flash-danger {
+    background: rgba(248, 113, 113, 0.08);
+    color: #b91c1c;
+    border: 1px solid rgba(248, 113, 113, 0.35);
+}
+
+/* =========================
+   Typography & Form Layout
+   ========================= */
+h2 {
+    font-size: 1.25rem;
+    margin-bottom: 8px;
+    color: var(--text-main);
+}
+
+.hint {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    margin-bottom: 12px;
+}
+
+/* Multi-step form */
+.form-step {
+    display: none;
+}
+
+.form-step.active {
+    display: block;
+}
+
+.grid-2 {
+    display: grid;
+    gap: 16px;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.form-group {
+    margin-bottom: 14px;
+}
+
+label {
+    display: block;
+    margin-bottom: 6px;
+    font-size: 0.88rem;
+    color: #374151;
+    font-weight: 500;
+}
+
+/* Inputs */
+input[type="text"],
+input[type="email"],
+input[type="tel"],
+input[type="url"],
+input[type="date"],
+textarea,
+select {
+    width: 100%;
+    padding: 10px 11px;
+    border-radius: 12px;
+    border: 1px solid #d1d5db;
+    background: #ffffff;
+    color: var(--text-main);
+    font-size: 0.93rem;
+    outline: none;
+    transition:
+        border 0.16s ease,
+        box-shadow 0.16s ease,
+        background 0.16s ease,
+        transform 0.06s ease;
+    box-shadow:
+        0 4px 10px rgba(148, 163, 184, 0.25);
+}
+
+input::placeholder,
+textarea::placeholder {
+    color: var(--text-soft);
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+    border-color: var(--primary-soft);
+    box-shadow:
+        0 0 0 1px rgba(99, 102, 241, 0.45),
+        0 8px 18px rgba(129, 140, 248, 0.45);
+    background: var(--bg-soft);
+    transform: translateY(-1px);
+}
+
+textarea {
+    min-height: 100px;
+    resize: vertical;
+}
+
+.small-text {
+    font-size: 0.8rem;
+    color: var(--text-soft);
+    margin-top: 4px;
+}
+
+/* =========================
+   Project Cards
+   ========================= */
+.project-card {
+    border-radius: 16px;
+    border: 1px solid #e5e7eb;
+    background: linear-gradient(135deg, #ffffff, #f5f7ff);
+    padding: 14px 15px;
+    margin-bottom: 12px;
+    box-shadow:
+        0 10px 24px rgba(148, 163, 184, 0.3);
+}
+
+/* =========================
+   Buttons
+   ========================= */
+button {
+    font-family: inherit;
+}
+
+.btn-primary,
+.btn-secondary,
+.btn-next,
+.btn-prev {
+    border-radius: 999px;
+    border: none;
+    padding: 9px 18px;
+    font-size: 0.92rem;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    transition:
+        transform 0.06s ease,
+        box-shadow 0.16s ease,
+        background 0.16s ease,
+        color 0.16s ease;
+}
+
+/* Primary / Next */
+.btn-primary,
+.btn-next {
+    background: linear-gradient(135deg, #4f46e5, #6366f1);
+    color: #ffffff;
+    font-weight: 600;
+    box-shadow:
+        0 8px 18px rgba(129, 140, 248, 0.55);
+}
+
+.btn-primary:hover,
+.btn-next:hover {
+    transform: translateY(-1px);
+    box-shadow:
+        0 12px 26px rgba(129, 140, 248, 0.6);
+}
+
+/* Secondary */
+.btn-secondary {
+    background: #e5e7eb;
+    color: var(--text-main);
+    border: 1px solid #d1d5db;
+    box-shadow:
+        0 6px 14px rgba(148, 163, 184, 0.4);
+}
+
+.btn-secondary:hover {
+    background: #d1d5db;
+    transform: translateY(-1px);
+}
+
+/* Prev */
+.btn-prev {
+    background: transparent;
+    color: var(--text-muted);
+    border: 1px solid #d1d5db;
+    box-shadow:
+        0 4px 10px rgba(148, 163, 184, 0.3);
+}
+
+.btn-prev:hover {
+    border-color: var(--primary);
+    color: var(--primary);
+    background: #eef2ff;
+    transform: translateY(-1px);
+}
+
+/* Form navigation */
+.form-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 18px;
+}
+
+/* =========================
+   Pills (checkbox style)
+   ========================= */
+.pill-checkboxes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.pill-checkboxes label {
+    border-radius: 999px;
+    padding: 7px 13px;
+    border: 1px solid #e5e7eb;
+    background: #ffffff;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.85rem;
+    cursor: pointer;
+    color: #374151;
+    box-shadow:
+        0 6px 14px rgba(148, 163, 184, 0.25);
+    transition:
+        background 0.16s ease,
+        border-color 0.16s ease,
+        color 0.16s ease,
+        transform 0.06s ease,
+        box-shadow 0.16s ease;
+}
+
+.pill-checkboxes input[type="checkbox"] {
+    width: auto;
+}
+
+.pill-checkboxes input[type="checkbox"]:checked + span,
+.pill-checkboxes label:has(input[type="checkbox"]:checked) {
+    background: linear-gradient(135deg, #abb2f4, #adeae2);
+    color: #111827;
+    border-color: rgba(129, 140, 248, 0.7);
+    box-shadow:
+        0 10px 22px rgba(129, 140, 248, 0.4);
+    transform: translateY(-1px);
+}
+
+/* =========================
+   Responsive
+   ========================= */
+@media (max-width: 900px) {
+    body {
+        display: block;
+    }
+
+    .app-shell {
+        flex-direction: column;
+        padding: 16px;
+    }
+
+    .sidebar {
+        width: 100%;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+    }
+
+    .steps-nav {
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 6px;
+    }
+
+    .main-content {
+        padding-top: 6px;
+    }
+
+    .grid-2 {
+        grid-template-columns: 1fr;
+    }
+}
+/* =========================
+   Thank-You Page – Light Card
+   ========================= */
+
+.thankyou-page {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    background: radial-gradient(circle at top, #fdfcfb 0, #f5f7ff 40%, #e7f4ff 100%);
+}
+
+/* Main card */
+.thankyou-card {
+    max-width: 540px;
+    width: 100%;
+    background: #ffffff;
+    border-radius: 24px;
+    padding: 28px 26px 24px;
+    border: 1px solid #e5e7eb;
+    box-shadow:
+        0 18px 34px rgba(148, 163, 184, 0.35);
+    text-align: center;
+}
+
+/* Check icon bubble */
+.thankyou-icon {
+    width: 80px;
+    height: 80px;
+    margin: 0 auto 16px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 30% 30%, #4ade80, #22c55e);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    color: #ffffff;
+    box-shadow:
+        0 12px 26px rgba(34, 197, 94, 0.4);
+}
+
+/* Hero line with reference ID */
+.thankyou-ref-hero {
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: #111827;
+    margin-bottom: 10px;
+}
+
+/* Big pill reference ID */
+.reference-id {
+    display: inline-block;
+    margin-left: 4px;
+    padding: 5px 12px;
+    border-radius: 999px;
+    background: #eef2ff;
+    color: #111827;
+    font-family: ui-monospace, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    font-size: 1rem;
+    letter-spacing: 0.03em;
+}
+
+/* Title and subtitle */
+.thankyou-title {
+    font-size: 1.7rem;
+    font-weight: 700;
+    color: #111827;
+    margin-bottom: 6px;
+}
+
+.thankyou-subtitle {
+    font-size: 0.96rem;
+    color: #6b7280;
+    margin-bottom: 14px;
+}
+
+/* Highlight block with ID + explanation */
+.thankyou-details {
+    margin: 14px auto 18px;
+    padding: 12px 14px;
+    border-radius: 16px;
+    background: linear-gradient(135deg, #fdf2ff, #e0f2fe);
+    color: #374151;
+    font-size: 0.9rem;
+    text-align: left;
+}
+
+/* Main body text */
+.thankyou-card p {
+    font-size: 0.94rem;
+    color: #374151;
+}
+
+/* Actions row */
+.thankyou-actions {
+    margin-top: 14px;
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+/* Footer hint */
+.thankyou-footer-link {
+    margin-top: 14px;
+    font-size: 0.85rem;
+    color: #6b7280;
+}
+
+.thankyou-footer-link a {
+    color: #4f46e5;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.thankyou-footer-link a:hover {
+    text-decoration: underline;
+}
+
+.social-links {
+    list-style: none;
+    margin: 10px 0 4px;
+    padding: 0;
+    display: flex;
+    gap: 10px;
+    justify-content: center; /* or flex-start if you prefer left-aligned */
+}
+
+.social-links li {
+    margin: 0;
+}
+
+.social-links a {
+    text-decoration: none;
+}
+
+.social-icon {
+    width: 30px;
+    height: 30px;
+    border-radius: 999px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: #ffffff;
+    font-size: 0.9rem;
+}
+
+/* Brand colors */
+.social-icon.linkedin { background: #0077b5; }   /*[web:251]*/
+.social-icon.github   { background: #000000; }   /*[web:254][web:258]*/
+.social-icon.instagram {
+    background: radial-gradient(circle at 30% 30%, #feda75, #fa7e1e, #d62976, #962fbf, #4f5bd5);
+}                                                  /*[web:256]*/
+.social-icon.twitter  { background: #000000; }    /*[web:251]*/
+
+
+/* Responsive tweaks */
+@media (max-width: 600px) {
+    .thankyou-card {
+        padding: 22px 18px 20px;
+    }
+
+    .thankyou-title {
+        font-size: 1.4rem;
+    }
+
+    .thankyou-ref-hero {
+        font-size: 0.98rem;
+    }
+}
+
+/* DEBUG: make verify-email layout visible */
+* {
+  outline: 1px solid red !important;
+}
+
+body {
+  background: white !important;
+  color: black !important;
+}
+
+.app-shell,
+.main-content,
+.main-header,
+.content,
+.verify-form {
+  border: 2px solid blue !important;
+}

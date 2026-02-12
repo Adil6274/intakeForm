@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Submission Detail</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #f8fafc;
+            color: #1a202c;
+            line-height: 1.5;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        .header .meta {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        .actions {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            display: inline-block;
+            margin: 0 10px;
+            transition: all 0.2s;
+        }
+
+        .btn-primary {
+            background: #3b82f6;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #2563eb;
+        }
+
+        .btn-secondary {
+            background: #6b7280;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #4b5563;
+        }
+
+        .btn-success {
+            background: #10b981;
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #059669;
+        }
+
+        .section {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+
+        .section-header {
+            background: #f8fafc;
+            padding: 15px 20px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .section-header h2 {
+            color: #1e3a8a;
+            font-size: 18px;
+            margin: 0;
+        }
+
+        .section-content {
+            padding: 20px;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 15px;
+        }
+
+        .info-item {
+            margin-bottom: 15px;
+        }
+
+        .info-label {
+            font-weight: 600;
+            color: #374151;
+            font-size: 14px;
+            margin-bottom: 5px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .info-value {
+            color: #4b5563;
+            line-height: 1.5;
+        }
+
+        .tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+            margin-top: 5px;
+        }
+
+        .tag {
+            background: #e5e7eb;
+            color: #374151;
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .projects {
+            margin-top: 15px;
+        }
+
+        .project {
+            background: #f8fafc;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 15px;
+        }
+
+        .project h3 {
+            color: #1e3a8a;
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+
+        .project-meta {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 10px;
+            font-size: 14px;
+            color: #6b7280;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #3b82f6;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .back-link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="{{ url_for('admin_submissions') }}" class="back-link">← Back to All Submissions</a>
+
+        <div class="header">
+            <h1>{{ submission.full_name or 'Unnamed Submission' }}</h1>
+            <div class="meta">
+                Public ID: <code>{{ submission.public_id }}</code> |
+                Submitted: {{ submission.submitted_at.strftime('%Y-%m-%d %H:%M:%S') if submission.submitted_at else 'N/A' }}
+            </div>
+        </div>
+
+        <div class="actions">
+            <a href="{{ url_for('intake_pdf', public_id=submission.public_id) }}" target="_blank" class="btn btn-success">📄 Generate PDF</a>
+            <a href="mailto:{{ submission.email }}" class="btn btn-primary">📧 Email Client</a>
+            <a href="tel:{{ submission.phone }}" class="btn btn-secondary">📞 Call Client</a>
+        </div>
+
+        <!-- Profile & Contact -->
+        <div class="section">
+            <div class="section-header">
+                <h2>👤 Profile & Contact</h2>
+            </div>
+            <div class="section-content">
+                <div class="info-grid">
+                    <div class="info-item">
+                        <div class="info-label">Full Name</div>
+                        <div class="info-value">{{ submission.full_name or 'N/A' }}</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Preferred Name</div>
+                        <div class="info-value">{{ submission.preferred_name or 'N/A' }}</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Profession</div>
+                        <div class="info-value">{{ submission.profession or 'N/A' }}</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Tagline</div>
+                        <div class="info-value">{{ submission.tagline or 'N/A' }}</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Email</div>
+                        <div class="info-value">{{ submission.email or 'N/A' }}</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Phone</div>
+                        <div class="info-value">{{ submission.phone or 'N/A' }}</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">WhatsApp</div>
+                        <div class="info-value">{{ submission.whatsapp or 'N/A' }}</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Location</div>
+                        <div class="info-value">{{ submission.location or 'N/A' }} ({{ submission.time_zone or 'N/A' }})</div>
+                    </div>
+                </div>
+
+                <div class="info-item">
+                    <div class="info-label">Short Bio</div>
+                    <div class="info-value">{{ submission.bio_short or 'N/A' }}</div>
+                </div>
+
+                <div class="info-item">
+                    <div class="info-label">Detailed Bio</div>
+                    <div class="info-value">{{ submission.bio_long or 'N/A' }}</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Brand & Goals -->
+        <div class="section">
+            <div class="section-header">
+                <h2>🎨 Brand & Goals</h2>
+            </div>
+            <div class="section-content">
+                <div class="info-grid">
+                    <div class="info-item">
+                        <div class="info-label">Company</div>
+                        <div class="info-value">{{ submission.company or 'N/A' }}</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Industry</div>
+                        <div class="info-value">{{ submission.industry or 'N/A' }}</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Website Purpose</div>
+                        <div class="info-value">{{ submission.website_purpose or 'N/A' }}</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Target Audience</div>
+                        <div class="info-value">{{ submission.target_audience or 'N/A' }}</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Tone & Style</div>
+                        <div class="info-value">{{ submission.tone_style or 'N/A' }}</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Existing Website</div>
+                        <div class="info-value">{{ submission.existing_website or 'N/A' }}</div>
+                    </div>
+                </div>
+
+                <div class="info-item">
+                    <div class="info-label">Brand Keywords</div>
+                    <div class="tags">
+                        {% if submission.brand_keywords %}
+                            {% for keyword in submission.brand_keywords.split(',') %}
+                                <span class="tag">{{ keyword.strip() }}</span>
+                            {% endfor %}
+                        {% else %}
+                            <span class="tag">None specified</span>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="info-item">
+                    <div class="info-label">Preferred Colors</div>
+                    <div class="tags">
+                        {% if submission.color_prefs %}
+                            {% for color in submission.color_prefs.split(',') %}
+                                <span class="tag">{{ color.strip() }}</span>
+                            {% endfor %}
+                        {% else %}
+                            <span class="tag">None specified</span>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="info-item">
+                    <div class="info-label">Colors to Avoid</div>
+                    <div class="tags">
+                        {% if submission.dont_use_colors %}
+                            {% for color in submission.dont_use_colors.split(',') %}
+                                <span class="tag">{{ color.strip() }}</span>
+                            {% endfor %}
+                        {% else %}
+                            <span class="tag">None specified</span>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Experience & Skills -->
+        <div class="section">
+            <div class="section-header">
+                <h2>💼 Experience & Skills</h2>
+            </div>
+            <div class="section-content">
+                <div class="info-item">
+                    <div class="info-label">Professional Experience</div>
+                    <div class="info-value">{{ submission.experience or 'N/A' }}</div>
+                </div>
+
+                <div class="info-item">
+                    <div class="info-label">Education</div>
+                    <div class="info-value">{{ submission.education or 'N/A' }}</div>
+                </div>
+
+                <div class="info-item">
+                    <div class="info-label">Core Skills</div>
+                    <div class="tags">
+                        {% if submission.skills %}
+                            {% for skill in submission.skills.split(',') %}
+                                <span class="tag">{{ skill.strip() }}</span>
+                            {% endfor %}
+                        {% else %}
+                            <span class="tag">None specified</span>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="info-item">
+                    <div class="info-label">Services Offered</div>
+                    <div class="info-value">{{ submission.services_offered or 'N/A' }}</div>
+                </div>
+
+                <div class="info-item">
+                    <div class="info-label">Achievements</div>
+                    <div class="info-value">{{ submission.achievements or 'N/A' }}</div>
+                </div>
+
+                <div class="info-grid">
+                    <div class="info-item">
+                        <div class="info-label">Primary CTA</div>
+                        <div class="info-value">{{ submission.primary_cta or 'N/A' }}</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Secondary CTA</div>
+                        <div class="info-value">{{ submission.secondary_cta or 'N/A' }}</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Preferred Contact</div>
+                        <div class="info-value">{{ submission.preferred_contact or 'N/A' }}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Projects -->
+        <div class="section">
+            <div class="section-header">
+                <h2>📁 Projects</h2>
+            </div>
+            <div class="section-content">
+                {% if submission.projects %}
+                    <div class="projects">
+                        {% for project in submission.projects %}
+                        <div class="project">
+                            <h3>{{ project.title or 'Untitled Project' }}</h3>
+                            <div class="project-meta">
+                                <span><strong>Role:</strong> {{ project.role or 'N/A' }}</span>
+                                <span><strong>Tech:</strong> {{ project.tech or 'N/A' }}</span>
+                            </div>
+                            <div class="info-item">
+                                <div class="info-label">Description</div>
+                                <div class="info-value">{{ project.description or 'N/A' }}</div>
+                            </div>
+                            <div class="info-item">
+                                <div class="info-label">Results</div>
+                                <div class="info-value">{{ project.results or 'N/A' }}</div>
+                            </div>
+                            {% if project.url %}
+                            <div class="info-item">
+                                <div class="info-label">URL</div>
+                                <div class="info-value"><a href="{{ project.url }}" target="_blank">{{ project.url }}</a></div>
+                            </div>
+                            {% endif %}
+                        </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <div class="info-value">No projects specified.</div>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Technical & Business -->
+        <div class="section">
+            <div class="section-header">
+                <h2>⚙️ Technical & Business Details</h2>
+            </div>
+            <div class="section-content">
+                <div class="info-grid">
+                    <div class="info-item">
+                        <div class="info-label">Pages Required</div>
+                        <div class="tags">
+                            {% if submission.pages %}
+                                {% for page in submission.pages %}
+                                    <span class="tag">{{ page }}</span>
+                                {% endfor %}
+                            {% else %}
+                                <span class="tag">None specified</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Features Needed</div>
+                        <div class="tags">
+                            {% if submission.features %}
+                                {% for feature in submission.features %}
+                                    <span class="tag">{{ feature }}</span>
+                                {% endfor %}
+                            {% else %}
+                                <span class="tag">None specified</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Technical Preferences</div>
+                        <div class="info-value">
+                            {% if submission.technical_prefs %}
+                                <strong>CMS:</strong> {{ submission.technical_prefs.get('cms', 'N/A') }}<br>
+                                <strong>Blog:</strong> {{ submission.technical_prefs.get('blog', 'N/A') }}<br>
+                                <strong>SEO Level:</strong> {{ submission.technical_prefs.get('seo', 'N/A') }}<br>
+                                <strong>Analytics:</strong> {{ submission.technical_prefs.get('analytics', 'N/A') }}
+                            {% else %}
+                                None specified
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Timeline & Budget</div>
+                        <div class="info-value">
+                            <strong>Deadline:</strong> {{ submission.deadline.strftime('%Y-%m-%d') if submission.deadline else 'N/A' }}<br>
+                            <strong>Budget:</strong> {{ submission.budget_range or 'N/A' }}<br>
+                            <strong>Content Ready:</strong> {{ submission.content_ready or 'N/A' }}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="info-item">
+                    <div class="info-label">Additional Notes</div>
+                    <div class="info-value">{{ submission.other_notes or 'None provided' }}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
